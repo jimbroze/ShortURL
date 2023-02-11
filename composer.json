@@ -1,0 +1,15 @@
+{
+  "name": "jimbroze/ShortURL",
+  "description": "An API that shorten's URLs.",
+  "authors": [
+    {
+      "name": "Jim Dickinson"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9"
+  }
+}

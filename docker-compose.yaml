@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  php-apache:
+    container_name: php-apache
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html/public
+    volumes:
+      - ./:/var/www/html/
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./mysql-data:/var/lib/mysql
