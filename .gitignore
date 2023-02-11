@@ -1,4 +1,5 @@
 *.env
+*.cache
 
 ##### Composer
 composer.phar

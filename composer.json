@@ -1,11 +1,16 @@
 {
-  "name": "jimbroze/ShortURL",
+  "name": "jimbroze/shorturl",
   "description": "An API that shorten's URLs.",
   "authors": [
     {
       "name": "Jim Dickinson"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "ShortUrl\\": "src/"
+    }
+  },
   "require": {
     "vlucas/phpdotenv": "^5"
   },

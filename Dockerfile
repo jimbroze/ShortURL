@@ -16,8 +16,8 @@ RUN docker-php-ext-install zip
 # Install composer
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
-# Prep packages with composer
-# composer update must be run inside the running container to update package requirements.
+# Prep packages with composer. "Composer update" must be run inside
+# the running container to update package requirements.
 WORKDIR /var/www/html/
 COPY composer.json composer.json
 COPY composer.lock composer.lock
