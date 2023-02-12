@@ -11,12 +11,17 @@ class URLController {
   private $requestMethod;
   private $fullUri;
 
-  public function __construct($fullUri, $requestMethod) {
+  public function __construct(string $fullUri, string $requestMethod) {
     $this->fullUri = $fullUri;
     $this->requestMethod = $requestMethod;
   }
 
-  public function processRequest() {
+  /**
+   * Process requests at the "/" or "/shorten" API endpoints
+   * @access public
+   * @return void
+   */
+  public function processRequest(): void {
     switch ($this->requestMethod) {
       case 'GET':
         $uriPath = parse_url($this->fullUri, PHP_URL_PATH);
@@ -45,7 +50,13 @@ class URLController {
     }
   }
 
-  private function processLongURL($queryString) {
+  /**
+   * Process long URLs
+   * @access private
+   * @param string $queryString URI query containing the long URL to store.
+   * @return array
+   */
+  private function processLongURL(string|null $queryString): array {
     // Check for empty query
     if (is_null($queryString))
       return $this->notFoundResponse();
@@ -70,7 +81,13 @@ class URLController {
     return $response;
   }
 
-  private function processShortURL($shortUrlCode) {
+  /**
+   * Process short URLs
+   * @access private
+   * @param string $shortUrlCode short URL code to search for
+   * @return array
+   */
+  private function processShortURL($shortUrlCode): array {
     // Check if URL matches requirements
     $urlModel = new URLModel();
     if (!$urlModel->setValidateShortURL($shortUrlCode)) {
@@ -91,7 +108,12 @@ class URLController {
     return $response;
   }
 
-  private function unprocessableEntityResponse() {
+  /**
+   * Return a 422 response when inputs haven't been provided correctly
+   * @access private
+   * @return array
+   */
+  private function unprocessableEntityResponse(): array {
     $response['status_code_header'] = 'HTTP/1.1 422 Unprocessable Entity';
     $response['body'] = json_encode([
       'error' => 'Invalid input'
@@ -99,7 +121,12 @@ class URLController {
     return $response;
   }
 
-  private function notFoundResponse() {
+  /**
+   * Return a 404 response for incorrect endpoints
+   * @access private
+   * @return array
+   */
+  private function notFoundResponse(): array {
     $response['status_code_header'] = 'HTTP/1.1 404 Not Found';
     $response['body'] = null;
     return $response;

@@ -4,7 +4,6 @@ namespace ShortUrl\Model;
 
 use ShortUrl\Database\DbConnector;
 
-
 /**
  * A model representing a URL
  */
@@ -16,7 +15,10 @@ class URLModel {
   private $longUrl = null;
   private $createdDate = null;
 
-  public function __construct($shortUrlCode = null, $longUrl = null) {
+  public function __construct(
+    string $shortUrlCode = null,
+    string $longUrl = null
+  ) {
     $this->db = (new DbConnector())->getConnection();
     if (!is_null($shortUrlCode)) {
       if ($this->setValidateShortURL($shortUrlCode)) {
@@ -35,7 +37,13 @@ class URLModel {
     }
   }
 
-  public function createShortUrl($longUrl = null) {
+  /**
+   * Save a URL and create a short URL that links to it
+   * @access public
+   * @param string $longUrl full length URL (up to 2048 chars)
+   * @return string
+   */
+  public function createShortUrl(string $longUrl = null): string {
     if ($this->setValidateLongURL($longUrl) == false) {
       throw new \Exception("Long URL is not valid." . $longUrl);
     }
@@ -60,7 +68,13 @@ class URLModel {
     return $this->shortUrlCode;
   }
 
-  public function getLongURL($shortUrlCode = null) {
+  /**
+   * Use a short URL to retrieve a stored (long) URL
+   * @access public
+   * @param string $shortUrlCode 8 digit short URL
+   * @return string
+   */
+  public function getLongURL(string $shortUrlCode = null): string {
     if ($this->setValidateShortURL($shortUrlCode) == false) {
       throw new \Exception("Short URL is not valid: " . $shortUrlCode);
     }
@@ -77,7 +91,13 @@ class URLModel {
     return $this->longUrl;
   }
 
-  public function setValidateShortURL($shortUrlCode = null) {
+  /**
+   * Set the object's short URL and ensure it is valid.
+   * @access public
+   * @param string $shortUrlCode 8 digit short URL
+   * @return bool
+   */
+  public function setValidateShortURL(string $shortUrlCode = null): bool {
     if (!is_null($shortUrlCode)) {
       $this->shortUrlCode = $shortUrlCode;
     } elseif (is_null($this->shortUrlCode)) {
@@ -90,7 +110,13 @@ class URLModel {
     return true;
   }
 
-  public function setValidateLongURL($longUrl = null) {
+  /**
+   * Set the object's long URL and ensure it is valid.
+   * @access public
+   * @param string $longUrl full length URL (up to 2048 chars)
+   * @return bool
+   */
+  public function setValidateLongURL(string $longUrl = null): bool {
     if (!is_null($longUrl)) {
       $this->longUrl = $longUrl;
     } elseif (is_null($this->longUrl)) {
@@ -107,7 +133,13 @@ class URLModel {
     return true;
   }
 
-  private function generateRandomString($length = null) {
+  /**
+   * Generate a random hex string of specific length.
+   * @access private
+   * @param int $length length of string to generate
+   * @return string
+   */
+  private function generateRandomString(int $length = null): string {
     if (is_null($length))
       $length = self::$shortURLCodeLength;
     $randomString = md5(uniqid());
@@ -121,7 +153,7 @@ class URLModel {
    * @access private
    * @return integer
    */
-  private function countURLs() {
+  private function countURLs(): int {
     $sql = "SELECT count(1) FROM urls";
 
     return $this->db->query($sql)->fetchColumn();
@@ -132,7 +164,7 @@ class URLModel {
    * @access private
    * @return array<integer, Array>
    */
-  private function findAllURLs() {
+  private function findAllURLs(): array {
     // Would likely want some limits if required.
     $sql = "SELECT * FROM urls";
 
@@ -142,9 +174,10 @@ class URLModel {
   /**
    * find a URL in the database and return all data
    * @access private
+   * @param string $shortUrlCode 8 digit short URL
    * @return array<string, mixed>
    */
-  private function findURL($shortUrlCode) {
+  private function findURL(string $shortUrlCode): array|bool {
     $sql = "SELECT * FROM urls WHERE short_url_code=?";
 
     $statementHandle = $this->db->prepare($sql);
@@ -159,7 +192,7 @@ class URLModel {
    * @param string $longUrl full length URL (up to 2048 chars)
    * @return void
    */
-  private function addURL($shortUrlCode, $longUrl) {
+  private function addURL(string $shortUrlCode, string $longUrl): void {
     $sql = <<<SQL
       INSERT INTO urls (long_url, short_url_code)
       VALUES (:long_url, :short_url_code)
@@ -178,7 +211,7 @@ class URLModel {
    * @param string $longUrl full length URL (up to 2048 chars)
    * @return void
    */
-  private function updateURL($shortUrlCode, $longUrl) {
+  private function updateURL(string $shortUrlCode, string $longUrl): void {
     $sql = <<<SQL
       UPDATE urls
       SET long_url=:long_url
@@ -197,7 +230,7 @@ class URLModel {
    * @param string $shortUrlCode 8 digit short URL
    * @return void
    */
-  private function deleteURL($shortUrlCode) {
+  private function deleteURL(string $shortUrlCode): void {
     $sql = "DELETE FROM urls WHERE short_url_code = ?";
 
     $this->db->prepare($sql)->execute([$shortUrlCode]);
