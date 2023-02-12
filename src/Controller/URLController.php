@@ -27,7 +27,7 @@ class URLController {
         $uriPath = parse_url($this->fullUri, PHP_URL_PATH);
         if ($uriPath == "/shorten") {
           $response = $this->processLongURL(
-            parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY)
+            parse_url($this->fullUri, PHP_URL_QUERY)
           );
         } else {
           $response = $this->processShortURL(trim($uriPath, "/"));

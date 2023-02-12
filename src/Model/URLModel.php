@@ -148,6 +148,8 @@ class URLModel {
     return $trimmedRandomString;
   }
 
+  // ######### DB functions
+
   /**
    * Return the number of URLs in the database
    * @access private

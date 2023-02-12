@@ -102,6 +102,16 @@ Content-Type: text/plain
 http://<hostname>/a7F15gaw
 ```
 
+#### Note:
+URLs should be encoded correctly. Therefore they should not contain any ? or & characters when passed to the endpoint. As an example:
+```
+http://example.com/some?lorem=ipsum&foo=bar
+```
+should be encoded as:
+```
+http%3A%2F%2Fexample.com%2Fsome%3Florem%3Dipsum%26foo%3Dbar
+```
+
 ### /<shortURL>
 Redirect to a standard URL from a previously created short code.
 
