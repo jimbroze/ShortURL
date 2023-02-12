@@ -1,11 +1,7 @@
 # ShortURL
 
-ShortURL will be a URL shortener service accessed through an API. It is built in PHP.
+ShortURL is a URL shortener API. It is built in PHP.
 
-ShortURL is not fully implemented yet. Outstanding features are:
-
-* URL Shortening functions.
-* Create index page View
 
 ## Installation
 
@@ -82,7 +78,42 @@ vendor/bin/phpunit tests
 
 ## Usage
 
-Run the docker containers.
+Run the docker containers to start the server.
 ```bash
 docker compose up -d
+```
+
+ShortURL has 2 API endpoints:
+
+### /shorten?url=<url>
+Create a short URL from a long one
+
+#### Example request:
+
+```
+GET /shorten?url=google.com HTTP/1.1
+```
+
+#### Example response:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain
+http://<hostname>/a7F15gaw
+```
+
+### /<shortURL>
+Redirect to a standard URL from a previously created short code.
+
+#### Example request:
+
+```
+GET /a7F15gaw HTTP/1.1
+```
+
+#### Example response:
+
+```
+HTTP/1.1 302 Found
+Location: http://google.com
 ```

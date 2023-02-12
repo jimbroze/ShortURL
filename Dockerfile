@@ -7,6 +7,8 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Install PDO for database access
 RUN docker-php-ext-install pdo pdo_mysql
 
+RUN a2enmod rewrite
+
 # Install zip for composer to get packages
 RUN apt-get update && \
     apt-get install -y \

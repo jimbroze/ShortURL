@@ -3,13 +3,14 @@
 namespace ShortUrl\Model;
 
 use ShortUrl\Database\DbConnector;
-use ShortUrl\Lib\URLShortener;
 
 
 /**
  * A model representing a URL
  */
 class URLModel {
+  protected static $shortURLCodeLength = 8;
+
   private $db;
   private $shortUrlCode = null;
   private $longUrl = null;
@@ -42,7 +43,7 @@ class URLModel {
     // Create and validate short URL code.
     // check if in database and recreate if already exists.
     do {
-      $this->shortUrlCode = (new URLShortener($this->longUrl))->shortenUrl();
+      $this->shortUrlCode = $this->generateRandomString();
       if (!$this->setValidateShortURL($this->shortUrlCode))
         throw new \Exception("Short URL is not valid: " . $this->shortUrlCode);
     } while ($this->findURL($this->shortUrlCode) !== false);
@@ -99,7 +100,20 @@ class URLModel {
     if (strlen($this->longUrl) > 2048) {
       return false;
     }
+
+    if (is_null(parse_url($this->longUrl, PHP_URL_SCHEME)))
+      $this->longUrl = "http://" . $this->longUrl;
+
     return true;
+  }
+
+  private function generateRandomString($length = null) {
+    if (is_null($length))
+      $length = self::$shortURLCodeLength;
+    $randomString = md5(uniqid());
+    $trimmedRandomString = substr($randomString, -1 * ($length));
+
+    return $trimmedRandomString;
   }
 
   /**

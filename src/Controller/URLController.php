@@ -33,17 +33,28 @@ class URLController {
         break;
     }
     header($response['status_code_header']);
+
+    if (array_key_exists("redirect", $response)) {
+      header("Location: " . $response['redirect']);
+    }
+    if (array_key_exists("content_type", $response)) {
+      header($response['content_type']);
+    }
     if ($response['body']) {
       echo $response['body'];
     }
   }
 
   private function processLongURL($queryString) {
+    // Check for empty query
+    if (is_null($queryString))
+      return $this->notFoundResponse();
+
     // Get long URL from URL query parameter
     parse_str($queryString, $query);
-    if (!array_key_exists("url", $query)) {
+    if (!array_key_exists("url", $query))
       return $this->notFoundResponse();
-    }
+
     $longUrl = $query["url"];
 
     $urlModel = new URLModel();
@@ -54,6 +65,7 @@ class URLController {
 
     // Return short url to user
     $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['content_type'] = 'Content-Type:text/plain; charset=UTF-8';
     $response['body'] = json_encode($shortUrlCode);
     return $response;
   }
@@ -75,6 +87,7 @@ class URLController {
     // Return long URL to user
     $response['status_code_header'] = 'HTTP/1.1 302 Found';
     $response['body'] = json_encode($longUrl);
+    $response['redirect'] = $longUrl;
     return $response;
   }
 
