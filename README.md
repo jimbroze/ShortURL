@@ -4,9 +4,8 @@ ShortURL will be a URL shortener service accessed through an API. It is built in
 
 ShortURL is not fully implemented yet. Outstanding features are:
 
-* API: Add URL
-* API: Retrieve URL
 * URL Shortening functions.
+* Create index page View
 
 ## Installation
 
