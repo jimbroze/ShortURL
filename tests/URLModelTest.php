@@ -58,33 +58,33 @@ final class URLModelTest extends TestCase {
   }
 
   /**
-   * @covers ::countURLs
+   * @covers ::countURLsInDb
    */
-  public function testCount() {
+  public function testCountURLsInDb() {
     $urlModel = new URLModel();
-    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
 
     // Check that number of rows is a number
     $this->assertIsNumeric($numRows, "Counting failed");
   }
 
   /**
-   * @covers ::addURL
+   * @covers ::addURLInDb
    */
-  public function testAdd() {
+  public function testAddURLInDb() {
     $urlModel = new URLModel();
 
     // Get initial number of rows
-    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
 
     PHPUnitUtil::callMethod(
       $urlModel,
-      'addURL',
+      'addURLInDb',
       array($this->shortUrlCode, $this->longUrl)
     );
 
     // Get number of rows after the add.
-    $newNumRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $newNumRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
 
     $this->assertEquals($newNumRows, $numRows + 1, "Could not add URL");
 
@@ -94,28 +94,28 @@ final class URLModelTest extends TestCase {
     $this->expectExceptionCode('23000');
     PHPUnitUtil::callMethod(
       $urlModel,
-      'addURL',
+      'addURLInDb',
       array($this->shortUrlCode, $this->longUrl)
     );
   }
 
   /**
-   * @covers ::findURL
+   * @covers ::findURLInDb
    */
-  public function testFind() {
+  public function testFindURLInDb() {
 
     $urlModel = new URLModel();
 
     // Add an example URL before searching for it
     PHPUnitUtil::callMethod(
       $urlModel,
-      'addURL',
+      'addURLInDb',
       array($this->shortUrlCode, $this->longUrl)
     );
 
     $url = PHPUnitUtil::callMethod(
       $urlModel,
-      'findURL',
+      'findURLInDb',
       array($this->shortUrlCode)
     );
 
@@ -129,9 +129,9 @@ final class URLModelTest extends TestCase {
   }
 
   /**
-   * @covers ::updateURL
+   * @covers ::updateURLInDb
    */
-  public function testUpdate() {
+  public function testUpdateURLInDb() {
     $longUrl = "http://bing.com";
 
     $urlModel = new URLModel();
@@ -139,21 +139,21 @@ final class URLModelTest extends TestCase {
     // Add an example URL before updating it
     PHPUnitUtil::callMethod(
       $urlModel,
-      'addURL',
+      'addURLInDb',
       array($this->shortUrlCode, $this->longUrl)
     );
 
     // Get initial number of rows
-    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
 
     PHPUnitUtil::callMethod(
       $urlModel,
-      'updateURL',
+      'updateURLInDb',
       array($this->shortUrlCode, $longUrl)
     );
 
     // Get number of rows after the update.
-    $newNumRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $newNumRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
 
     $this->assertEquals(
       $newNumRows,
@@ -164,7 +164,7 @@ final class URLModelTest extends TestCase {
     // Check that the long URL matches the updated value
     $url = PHPUnitUtil::callMethod(
       $urlModel,
-      'findURL',
+      'findURLInDb',
       array($this->shortUrlCode)
     );
     $this->assertNotFalse($url, "URL was not updated");
@@ -176,30 +176,30 @@ final class URLModelTest extends TestCase {
   }
 
   /**
-   * @covers ::deleteURL
+   * @covers ::deleteURLInDb
    */
-  public function testDelete() {
+  public function testDeleteURLInDb() {
     $urlModel = new URLModel();
 
     // Add an example URL before deleting it
     PHPUnitUtil::callMethod(
       $urlModel,
-      'addURL',
+      'addURLInDb',
       array($this->shortUrlCode, $this->longUrl)
     );
 
     // Get number of rows before deleting
-    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $numRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
 
     PHPUnitUtil::callMethod(
       $urlModel,
-      'deleteURL',
+      'deleteURLInDb',
       array($this->shortUrlCode)
     );
 
 
     // Get number of rows after deleting
-    $newNumRows = PHPUnitUtil::callMethod($urlModel, 'countURLs', array());
+    $newNumRows = PHPUnitUtil::callMethod($urlModel, 'countURLsInDb', array());
     $this->assertEquals($newNumRows, $numRows - 1, "Could not delete URL");
   }
 

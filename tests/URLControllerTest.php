@@ -107,7 +107,7 @@ final class URLControllerTest extends TestCase {
     // Add url to database before getting.
     PHPUnitUtil::callMethod(
       $urlModel,
-      'addURL',
+      'addURLInDb',
       array($shortUrlCode, $longUrl)
     );
 
